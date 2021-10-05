@@ -13,5 +13,7 @@ export class UsersService {
       throw new NotFoundException();
     }
     return user;
+
+    
   }
 }
