@@ -1,4 +1,4 @@
-import { lsString, Length, IsString} from 'class-validator'
+import { IsString, Length } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
