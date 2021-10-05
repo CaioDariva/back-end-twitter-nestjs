@@ -1,6 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { User } from '.prisma/client';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
+import { User, UserCreateInput } from '.prisma/client';
 import { PrismaService } from 'src/prisma.service';
+import bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -13,7 +18,21 @@ export class UsersService {
       throw new NotFoundException();
     }
     return user;
-
-    
+  }
+  async create(data: UserCreateInput): Promise<User> {
+    const existing = await this.db.user.findUnique({
+      where: { username: data.username },
+    });
+    if (existing) {
+      throw new ConflictException('username already exists');
+    }
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+    const user = await this.db.user.create({
+      data: {
+        ...data,
+        password: hashedPassword,
+      },
+    });
+    return user;
   }
 }
