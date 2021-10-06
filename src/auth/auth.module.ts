@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
+import { PrismaService } from 'src/prisma.service';
 import { AuthService } from './auth.service';
 import { jwtConstants } from './jwt.constants';
 
@@ -12,6 +13,6 @@ import { jwtConstants } from './jwt.constants';
       signOptions: { expiresIn: '1h' },
     }),
   ],
-  providers: [AuthService],
+  providers: [AuthService, PrismaService],
 })
 export class AuthModule {}
