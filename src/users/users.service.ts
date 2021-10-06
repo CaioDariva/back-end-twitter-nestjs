@@ -36,4 +36,9 @@ export class UsersService {
     });
     return user;
   }
+  async remove(username: string): Promise<User> {
+    return await this.db.user.delete({
+      where: { username },
+    });
+  }
 }
