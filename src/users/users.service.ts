@@ -10,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UsersService {
   constructor(private db: PrismaService) {}
+
   async findUnique(username: string): Promise<User> {
     const user = await this.db.user.findUnique({
       where: { username },
@@ -19,6 +20,7 @@ export class UsersService {
     }
     return user;
   }
+
   async create(data: Prisma.UserCreateInput): Promise<User> {
     const existing = await this.db.user.findUnique({
       where: { username: data.username },
@@ -36,9 +38,14 @@ export class UsersService {
     });
     return user;
   }
+
   async remove(username: string): Promise<User> {
     return await this.db.user.delete({
       where: { username },
     });
+  }
+
+  async findAll(): Promise<User[]> {
+    return await this.db.user.findMany();
   }
 }

@@ -18,4 +18,8 @@ export class UsersController {
   remove(@Param('username') username: string) {
     return this.service.remove(username);
   }
+  @Get('list')
+  findMany(): Promise<User[]> {
+    return this.service.findAll();
+  }
 }
