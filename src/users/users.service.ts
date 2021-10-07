@@ -3,8 +3,8 @@ import {
   NotFoundException,
   ConflictException,
 } from '@nestjs/common';
-import { User, Prisma } from '.prisma/client';
-import { PrismaService } from 'src/prisma.service';
+import { User, Prisma } from '@prisma/client';
+import { PrismaService } from '../prisma.service';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -15,9 +15,11 @@ export class UsersService {
     const user = await this.db.user.findUnique({
       where: { username },
     });
+
     if (!user) {
       throw new NotFoundException();
     }
+
     return user;
   }
 
@@ -25,9 +27,11 @@ export class UsersService {
     const existing = await this.db.user.findUnique({
       where: { username: data.username },
     });
+
     if (existing) {
       throw new ConflictException('username already exists');
     }
+
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
     const user = await this.db.user.create({
@@ -36,6 +40,7 @@ export class UsersService {
         password: hashedPassword,
       },
     });
+
     return user;
   }
 
@@ -43,9 +48,5 @@ export class UsersService {
     return await this.db.user.delete({
       where: { username },
     });
-  }
-
-  async findAll(): Promise<User[]> {
-    return await this.db.user.findMany();
   }
 }
