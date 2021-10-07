@@ -12,13 +12,17 @@ export class SimpleGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const req: Request = context.switchToHttp().getRequest();
+
     const token = req.headers['authorization'];
+
     if (!token) {
       throw new UnauthorizedException('token_not_found');
     }
+
     if (token !== 'MEU_TOKEN') {
       throw new UnauthorizedException('invalid_token');
     }
+
     return true;
   }
 }
